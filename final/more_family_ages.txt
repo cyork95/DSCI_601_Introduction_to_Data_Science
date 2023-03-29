@@ -1,0 +1,9 @@
+name	relationship-to-me	gender	age	category
+A	sister	f	47	adults
+B	brother	m	49	adults
+C	brother	m	18	teens
+D	step-sister	f	22	young-adults
+E	step-sister	f	20	young-adults
+F	step-sister	f	19	young-adults
+G	cousin	m	27	young-adults
+H	cousin	f	2	children

@@ -1,0 +1,111 @@
+---
+title: "DSCI_601_M12_Lab_Cody_York"
+author: "Cody York"
+date: "2022-12-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Imports and Setup
+
+```{r}
+library(gtools)
+library(tidyverse)
+library(ggplot2)
+library(dslabs)
+```
+
+## Creating a Deck of Cards
+
+The below code will create a deck of cards to be used with the probability functions.
+
+```{r}
+suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
+numbers <- c("Ace", "Duece", "Three", "Four", "Five", "Six", "Seven", "Eight",
+             "Nine", "Ten", "Jack", "Queen", "King")
+deck <- expand.grid(number = numbers, suit = suits)
+deck <- paste(deck$number, deck$suit)
+```
+
+## Calulate the Probability of a Natural 21 in Blackjack
+  1. The code will first create a hand of 2 random cards from the deck using
+permutations. Then two variables will be created for each card in the hand.
+  2. The code will then define a "ten-card" or a ace.
+  3. The code will then check to see if the first card in the hand is either an        ace or a "Ten-card".
+  4. The code will then check to see if the second card in the hand is either an       ace or a "Ten-card".
+  5. Then the probability will be calculated for getting a natural 21 in               blackjack.
+```{r}
+
+hands <- permutations(52, 2, v = deck)
+
+
+ten_card <- c(paste("King", suits), paste("Queen", suits), paste("Jack", suits),
+              paste("Ten", suits))
+ace_card <- paste("Ace", suits)
+
+first_card <- hands[, 1]
+first_card_ten_card <- first_card %in% ten_card
+first_card_ace_card <- first_card %in% ace_card
+
+second_card <- hands[, 2]
+second_card_ten_card <- second_card %in% ten_card
+second_card_ace_card <- second_card %in% ace_card
+
+natural_21_hands <- sum(first_card_ten_card, second_card_ace_card) +
+  sum(first_card_ace_card, second_card_ten_card)
+
+probability_natural_21 <- natural_21_hands / length(hands)
+probability_natural_21
+```
+
+## Suppose widgits produced at Acme Widgit Works have probability 0.005 of being defective. Suppose widgits are shipped in cartons containing 25 widgits. What is the probability that a randomly chosen carton contains no more than one defective widgit?
+
+  1. The distribution we need to use here is the Binomial Distribution. This
+means we need the Bernoulli distribution probability p and the n number of         trials.
+  2. First we will define a variable for the size of each crate which according        to the problem is 25.
+  3. Next we will define the probability of defectiveness which as described in        the problem is 0.005
+  4. Now, we will define a variable for the number of defective which in this            case is 1.
+  5. Finally, we will use the dbinom function to get the probability.
+
+```{r}
+
+size_of_crate <- 25
+probability_of_defective <- 0.005
+defective_widgets_allowed <- 1
+
+probability_of_widgets <- dbinom(x = defective_widgets_allowed,
+                                 size = size_of_crate,
+                                 prob = probability_of_defective)
+probability_of_widgets
+
+```
+
+## If we pick 800 males at random, what is the distribution of the tallest person?  How rare is a seven footer in a group of 800 males?
+
+  1. First we will create a data set from the heights data that has 800 males.
+  2. Next, we will create a histogram graph of the heights using ggplot2. WE can         see that this is a normal distribution.
+  3. Next we convert 7 foot to inches since the data is in inches.
+  4. Next we will find the probability of males greater than 7 foot in these 800         records. For this we will find the number greater than 7 foot divided by         800. Currently there are 4 greater than 7 feet in this data set which           means there is a 0.5% chance of being taller than 7 feet.
+
+```{r}
+height_males <- heights %>%
+  filter(sex == "Male") %>%
+  pull(height)
+height_800_males <- head(height_males, 800)
+
+ggplot(as.data.frame(height_800_males), aes(x = height_800_males)) +
+  geom_histogram(binwidth = 1, fill = "white", color = "black") +
+  geom_vline(aes(xintercept = mean(height_800_males)), color = "red",
+             linetype = "dashed") +
+  labs(title = "Height Histogram Plot for 800 Males",
+       x = "Height(inches)", y = "Count") +
+  theme_dark()
+
+target_height <- 80
+height_800_males_7_foot <- height_800_males[height_800_males >= target_height]
+probability_taller_than_7_foot <- length(height_800_males_7_foot) / 800
+print(probability_taller_than_7_foot)
+```

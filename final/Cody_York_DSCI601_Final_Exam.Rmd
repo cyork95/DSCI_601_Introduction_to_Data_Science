@@ -1,0 +1,165 @@
+---
+title: "Cody_York_DSCI601_Final_Exam"
+author: "Cody York"
+date: "2022-12-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Final Question 6
+In the below R function I will load a csv and a text file.
+
+```{r}
+# The below library helps with reading in files.
+library(readr)
+
+# This is a csv I created that I am reading in using readr read_csv()
+family_age_data <- read_csv("family_age_data.csv")
+# I use View() to see the variable I created
+View(family_age_data)
+
+#This is a txt file I created that I am reading in using the read_table() function from the readr package.
+more_family_age_data <- read_table("more_family_ages.txt")
+# I am also viewing this data set as well.
+View(more_family_age_data)
+
+#To calculate the mean in R we are going to first pick a numeric column in the data set using $ then the field name. For the mean we are going to get the mean of the age column using mean().
+
+mean(family_age_data$age)
+
+#To calcualcte standard deviation we are going to use the sd() function on the age data like before,
+
+sd(family_age_data$age)
+```
+
+## Final Question 8
+
+```{r}
+#First I am going to set the seed so we both get the same randoms.
+set.seed(124)
+
+#We are setting this to 50 since we need 50 birthdays
+n <- 50
+
+#I am setting this variable to 1000 so we can run this problem many times. 
+nreps <- 1000
+
+# I am going to create a function to run the duplicate check. This function takes 1 parameters n which is the number of birthdays that need generated. The variable birthdays is getting randomly generated numbers from 1 to 365 then using the round function to make them whole numbers.
+
+find_duplicates <- function(n, reps) {
+  birthdays <- round(runif(n, 1, 365))
+  any(duplicated(birthdays))
+}
+
+#This variable is using the replicate() function to run the previous function nreps number of times. I am then summing all the runs with duplicates to use the count later. This creates a data set for future use.
+number_of_duplicate_birthdays <- replicate(nreps, sum(find_duplicates(n)))
+
+#I am now applying the mean function to the previous variable created to see what probability is given. With this seed we end up with a probability of 96.4%
+mean(number_of_duplicate_birthdays)
+
+```
+
+## Final Question 9
+
+```{r}
+# First I am importing the dslabs library to get the data set. I am importing tidyverse for the filter function.
+library(dslabs)
+library(tidyverse)
+
+# I am running the help command to get more information about the data set. From the help documentation I know that this data set is regarding US Gun murders by state from the year 2010. This data came from FBI reports.
+
+#help(murders)
+
+#View(murders)
+
+#here I am using filter() to grab the data where the region is West or South
+murder_region <- murders %>%
+  filter(murders$region == "West"
+           | murders$region == "South")
+
+# For this graph, I set the pch to 21 because the circles make it easier to see the bunched up dots. I set the cex to 1.25 because I wanted them a little bigger. I set the color to them to red to signify murder and I set the cex.axis to 0.75 to fit all teh numbers on the y-axis.
+plot(
+  murder_region$population,
+  murder_region$total,
+  "p",
+  pch = 21,
+  cex = 1.25,
+  col = "red",
+  main = "Total Murders By Population From the West and South Regions",
+  xlab = "Population (by 10 million)",
+  ylab = "Total Murders",
+  cex.axis = 0.75
+)
+
+# I added this legend function to add a legend to the graph for readability. I made sure to use the same settings from the main graph so it will be easy to tell what is what.
+
+legend(
+  20,
+  1200,
+  c("Murders"),
+  col = "red",
+  pch = 21
+)
+
+#This abline funcion is adding a line of best fit to the graph so people can quickly see what the expected values are for each population.
+
+abline(
+  lm(murder_region$total ~ murder_region$population)
+)
+
+```
+
+## Final Question 10
+
+
+```{r}
+# I am setting the seed again to preserve the random.
+set.seed("1234")
+
+# Here N is the number of roulette plays and B is the number of times I want the simulation ran.
+N <- 1000
+B <- 10000
+
+
+# spin is a function I created for the monte carlo that represents a thousand roulette spins for the casino.
+spin <- function(N) {
+  X <- sample(c(1, -1), N, replace = TRUE, prob = c(18 / 38, 18 / 38))
+  S = sum(X)
+  return(S)
+}
+
+# events is my results from the monte carlo
+events <- replicate(B, spin(N))
+
+# events less than zeros is a sum of all the times I got less than zero form the simulation.
+events_less_than_zero <- sum(events < 0)
+
+#probability of events is the previous events less than zero dvided by the total number of events. 
+prob_of_events <- events_less_than_zero / B
+
+# I am plotting the events form the monte carlo
+plot(events)
+
+#this is the mean and standard deviation of S
+mean_events <- mean(events)
+sd_events <- sd(events)
+
+#this is the mean and standard deviation of X
+mean_x <- mean(X)
+sd_x <- sd(X)
+
+#this is the expected value and standard of error for X
+e_x <- 1 * 0.4737 + -1 * (1 - 0.4737)
+sd_err_x <- abs(-1 - 1) * sqrt(0.4737 * (1 - 0.4737))
+
+#this is the expected value and standard of error for S
+e_s <- 1000 * mean_events
+sd_err_s <- sqrt(1000) * sd_err_x
+
+#0.5065 is the probability
+events_normal_distribution <- pnorm(prob_of_events, mean_events, sd_err_s)
+
+```

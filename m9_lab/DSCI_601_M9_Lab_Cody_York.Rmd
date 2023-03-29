@@ -1,0 +1,62 @@
+---
+title: "DSCI_601_M9_Lab_Cody_York"
+author: "Cody York"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(readr)
+library(ggthemes)
+library(ggrepel)
+library(dslabs)
+
+```
+
+## Read the data into R Studio
+
+```{r}
+
+Crop_Range_GOES0901_R <- read_csv("Crop_Range_GOES0901_R.csv")
+View(Crop_Range_GOES0901_R)
+
+```
+
+## Select the needed columns, filter, group by and summarise
+
+```{r}
+
+GOES0901_Summarise_Data <- Crop_Range_GOES0901_R %>%
+  select(year, jday, gmt, frp, BinTime) %>%
+  filter(jday > 227) %>%
+  group_by(BinTime) %>%
+  summarise(average_frp = mean(frp))
+
+```
+
+## Graph the selected data
+
+```{r}
+
+GOES0901_Summarise_Data %>%
+  ## for the label, I decided to add individual labels so values could be quickly identified. In this case I decided to round the numbers to whole to clean the graph up
+  ggplot(aes(x = BinTime, y = average_frp, label = round(average_frp, 0))) +
+  ## I chose this shape becuase its a simple dot and I kept the color black for simplicity.
+  geom_point(shape = 19, color = "black") +
+  ## I added a local regression line to the graph and gave it a longdash line so it seems like something extra and not part of the data.
+  geom_smooth(linetype = "longdash") +
+  ## I added this to clean up the point lables
+  geom_text_repel() +
+  xlab("Round up Time for GMT") +
+  ylab("Average Fire Radioactive Power") +
+  ggtitle("GOES-R Fire Detection Average Radioactive Power") +
+  ## I liked this theme because it had a simple design but it made all my lables the correct size to fit the graph the best.
+  theme_clean()
+
+ggsave(filename = "GOESR_Fire_Detection_Average_Radioactive_Power.png")
+
+```
+

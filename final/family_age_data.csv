@@ -1,0 +1,30 @@
+name,relationship to me,gender,age,category
+A,mother,f,47,adults
+B,father,m,49,adults
+C,brother,m,18,teens
+D,step-sister,f,22,young adults
+E,step-sister,f,20,young adults
+F,step-sister,f,19,young adults
+G,fiance,m,27,young adults
+H,neice,f,2,children
+I,cousin,f,21,young adults
+J,cousin,m,20,young adults
+K,cousin,m,20,young adults
+L,nephew,m,1,babies
+M,mother-in-law,f,46,adults
+N,friend,f,26,young adults
+O,grandmother,f,69,seniors
+P,father-in-law,m,42,adults
+Q,grandfather,m,54,adults
+R,grandfather,m,74,seniors
+S,cousin,m,17,teens
+T,uncle,m,41,adults
+U,aunt,f,43,adults
+V,step-mother,f,39,adults
+W,friend,m,27,young adults
+X,friend,f,20,young adults
+Y,friend,m,32,adults
+Z,cousin,f,18,teens
+AA,cousin,m,17,teens
+BB,cousin,m,4,children
+CC,cousin,m,1,babies

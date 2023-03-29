@@ -1,0 +1,60 @@
+---
+title: "Cody-York-DSCI-601-My-First-R-Markdown"
+author: "Cody York"
+date: "2022-09-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Basic R Code
+
+```{r}
+a <- 2
+b <- 5
+c <- (a + b) / 100
+c
+```
+
+## Formatting Text
+
+*Italic*
+**Bold**
+This is `code` in text
+# Header 1
+## Header 2
+* Unordered list item
+1. Ordered list item
+[Link](https://www.google.com)
+$A = \pi \times r^{2}$
+
+Practice:
+
+This *sentence* contains **many** formats like
+1. Like `code <- "inside text" `
+* or [random links](https://www.google.com)
+2. $C  = (A + B)/200 $
+

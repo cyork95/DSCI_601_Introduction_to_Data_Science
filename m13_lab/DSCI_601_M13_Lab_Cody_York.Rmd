@@ -1,0 +1,25 @@
+---
+title: "DSCI_601_M13_Lab_Cody_York"
+author: "Cody York"
+date: "2022-12-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data from the maternity ward in a certain hospital shows that there is a historical average of 4.5 babies born in this hospital every day. What is the probability that more than 6 babies will be born in this hospital tomorrow?
+  1. Step 1 is to set our variables we will need for the Cumulative Probability        Poisson formula.
+  2. Step 2 is to prepare the formula. We will be setting the lower.tail to FALSE       So we can do greater than 6.
+
+```{r}
+successes <- 6
+l <- 4.5
+
+probability_of_greater_than_6_babies <- ppois(q = successes,
+                                              lambda = l,
+                                              lower.tail = FALSE)
+probability_of_greater_than_6_babies
+
+```
